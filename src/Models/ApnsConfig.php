@@ -12,7 +12,6 @@ class ApnsConfig extends BaseServiceConfigModel
     protected $fillable = [
         'service_id',
         'certificate',
-        'passphrase',
         'environment'
     ];
 
@@ -21,9 +20,8 @@ class ApnsConfig extends BaseServiceConfigModel
         'service_id' => 'integer'
     ];
 
-    protected $protected = ['pass_phrase'];
-
-    protected $encrypted = ['pass_phrase'];
+    /** @var array */
+    protected $encrypted = ['certificate'];
 
     /**
      * {@inheritdoc}
@@ -34,10 +32,16 @@ class ApnsConfig extends BaseServiceConfigModel
 
         switch ($schema['name']) {
             case 'certificate':
-                $schema['description'] = 'Please provide the path to your iOS APNS certificate (.pem) file.';
-                break;
-            case 'pass_phrase':
-                $schema['description'] = 'Enter your Pass Phrase for the certificate file.';
+                $schema['type'] = 'file_certificate';
+                $schema['label'] = 'Certificate file (.pem)';
+                $schema['description'] = 'Please provide your iOS APNS certificate (.pem) file. ' .
+                    'If you have the pkcs12 (.p12) file from Apple keychain access, you can convert it to .pem ' .
+                    'file using the following command. ' .
+                    '<br><pre>' .
+                    'openssl pkcs12 -in my-certificate-file.p12 -out my-certificate-file.pem -nodes -clcerts' .
+                    '</pre>' .
+                    'Replace  my-certificate-file.p12 with the name of the certificate file you exported ' .
+                    'from Keychain Access.';
                 break;
             case 'environment':
                 $schema['type'] = 'picklist';

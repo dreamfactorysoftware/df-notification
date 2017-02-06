@@ -20,6 +20,7 @@ class Push extends BaseResource
         $message = $this->getApnMessage();
         $devices = $this->getApnDevices();
         $result = $this->push($message, $devices);
+        $this->getParent()->deleteCertificateFile();
 
         return ['count' => $result->count()];
     }
@@ -41,12 +42,12 @@ class Push extends BaseResource
     protected function getApnDevices()
     {
         $deviceToken = $this->getDeviceToken();
-        if(empty($deviceToken)){
+        if (empty($deviceToken)) {
             throw new NotFoundException(
                 'Failed to push notification. No registered devices found for your application.'
             );
         }
-        foreach ($deviceToken as $key => $token){
+        foreach ($deviceToken as $key => $token) {
             $deviceToken[$key] = new Device(strtolower($token));
         }
 

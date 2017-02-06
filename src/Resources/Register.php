@@ -21,7 +21,7 @@ class Register extends BaseResource
     protected function handleGET()
     {
         $apiKey = $this->getApiKey();
-        if(empty($apiKey)){
+        if (empty($apiKey)) {
             $serviceId = $this->getParent()->getServiceId();
             $records = NotificationAppDevice::where('service_id', $serviceId)->get();
 
@@ -42,14 +42,14 @@ class Register extends BaseResource
     {
         $apiKey = $this->getApiKey(true);
         $deviceToken = $this->request->getPayloadData('device_token');
-        if(empty($deviceToken)){
+        if (empty($deviceToken)) {
             throw new BadRequestException('No Device Token found. Please provide a valid Device Token.');
         }
         $deviceToken = strtolower($deviceToken);
         $serviceId = $this->getParent()->getServiceId();
         $appId = $this->getAppId($apiKey);
         $existingTokens = $this->getDeviceTokenByApiKey($apiKey);
-        if(!in_array($deviceToken, $existingTokens)) {
+        if (!in_array($deviceToken, $existingTokens)) {
             $model = NotificationAppDevice::create([
                 'service_id'   => $serviceId,
                 'app_id'       => $appId,
@@ -71,11 +71,11 @@ class Register extends BaseResource
     {
         $apiKey = $this->getApiKey(true);
         $oldToken = $this->request->getPayloadData('old_token');
-        if(empty($oldToken)){
+        if (empty($oldToken)) {
             throw new BadRequestException('Old/Existing token not found. Please provide the old token that you are replacing.');
         }
         $newToken = $this->request->getPayloadData('new_token', $this->request->getPayloadData('device_token'));
-        if(empty($newToken)){
+        if (empty($newToken)) {
             throw new BadRequestException('New token not found. Please provide the new token that you are replacing the old token with.');
         }
         $oldToken = strtolower($oldToken);
@@ -84,8 +84,8 @@ class Register extends BaseResource
         $appId = $this->getAppId($apiKey);
 
         $records = $this->fetchAppDeviceMapping($appId);
-        foreach ($records as $record){
-            if($record['device_token'] === $oldToken){
+        foreach ($records as $record) {
+            if ($record['device_token'] === $oldToken) {
                 NotificationAppDevice::deleteById($record['id']);
                 $model = NotificationAppDevice::create([
                     'service_id'   => $serviceId,
@@ -96,7 +96,7 @@ class Register extends BaseResource
             }
         }
 
-        if(!empty($model)){
+        if (!empty($model)) {
             return ResponseFactory::create(['id' => $model->id], null, ServiceResponseInterface::HTTP_OK);
         } else {
             throw new NotFoundException('No existing record found for the old token provided.');

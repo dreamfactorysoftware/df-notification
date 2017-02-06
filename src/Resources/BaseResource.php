@@ -34,7 +34,7 @@ class BaseResource extends BaseRestResource
      */
     protected function getPushManager()
     {
-        if(empty($this->pushManager)){
+        if (empty($this->pushManager)) {
             $this->pushManager = $this->getParent()->getPushManager();
         }
 
@@ -46,7 +46,7 @@ class BaseResource extends BaseRestResource
      */
     protected function getPushAdapter()
     {
-        if(empty($this->pushAdapter)){
+        if (empty($this->pushAdapter)) {
             $this->pushAdapter = $this->getParent()->getPushAdapter();
         }
 
@@ -60,7 +60,7 @@ class BaseResource extends BaseRestResource
     protected function getMessage()
     {
         $message = $this->request->getPayloadData('message');
-        if(empty($message)){
+        if (empty($message)) {
             throw new BadRequestException('No message found. Please provide a message for your push notification.');
         }
 
@@ -76,10 +76,10 @@ class BaseResource extends BaseRestResource
     protected function getApiKey($throw = false)
     {
         $apiKey = $this->request->getPayloadData('api_key');
-        if(empty($apiKey)){
+        if (empty($apiKey)) {
             $apiKey = Session::getApiKey();
         }
-        if(empty($apiKey) && $throw === true){
+        if (empty($apiKey) && $throw === true) {
             throw new BadRequestException('No API Key found. Please provide a valid API Key.');
         }
 
@@ -94,8 +94,8 @@ class BaseResource extends BaseRestResource
     {
         $apiKey = $this->getApiKey();
         $deviceToken = $this->request->getPayloadData('device_token');
-        if(empty($deviceToken)){
-            if(empty($apiKey)){
+        if (empty($deviceToken)) {
+            if (empty($apiKey)) {
                 throw new BadRequestException(
                     'No API Key and/or Device Token found. ' .
                     'Please provide a valid API Key or Device Token for your push notification.'
@@ -104,7 +104,7 @@ class BaseResource extends BaseRestResource
             $deviceToken = $this->getDeviceTokenByApiKey($apiKey);
         }
 
-        if(!is_array($deviceToken)){
+        if (!is_array($deviceToken)) {
             $deviceToken = [$deviceToken];
         }
 
@@ -119,13 +119,13 @@ class BaseResource extends BaseRestResource
      */
     protected function getDeviceTokenByApiKey($apiKey)
     {
-        if(empty($apiKey)){
+        if (empty($apiKey)) {
             throw new InternalServerErrorException(
                 'Invalid API Key. Valid API Key is required for retrieving Device Tokens.'
             );
         }
         $appId = App::getAppIdByApiKey($apiKey);
-        if(empty($appId)){
+        if (empty($appId)) {
             throw new InternalServerErrorException(
                 'Unexpected error occurred. No App ID found for API Key provided. ' .
                 'Please clear DreamFactory cache and try again.'
@@ -134,7 +134,7 @@ class BaseResource extends BaseRestResource
 
         $records = $this->fetchAppDeviceMapping($appId);
         $out = [];
-        foreach ($records as $record){
+        foreach ($records as $record) {
             $out[] = $record['device_token'];
         }
 
@@ -165,7 +165,7 @@ class BaseResource extends BaseRestResource
     protected function getAppId($apiKey)
     {
         $appId = App::getAppIdByApiKey($apiKey);
-        if(empty($appId)){
+        if (empty($appId)) {
             throw new InternalServerErrorException(
                 'Unexpected error occurred. No App ID found for API Key provided. ' .
                 'Please clear DreamFactory cache and try again.'

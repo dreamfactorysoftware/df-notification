@@ -19,8 +19,10 @@ class NotificationAppDevice extends BaseModel
      */
     const UPDATED_AT = 'last_modified_date';
 
+    /** @var string */
     protected $table = 'notification_app_device';
 
+    /** @var array */
     protected $fillable = [
         'service_id',
         'app_id',

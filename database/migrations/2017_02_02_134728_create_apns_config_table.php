@@ -18,8 +18,7 @@ class CreateApnsConfigTable extends Migration
             function (Blueprint $t){
                 $t->integer('service_id')->unsigned()->primary();
                 $t->foreign('service_id')->references('id')->on('service')->onDelete('cascade');
-                $t->string('certificate');
-                $t->text('passphrase')->nullable();
+                $t->longText('certificate');
                 $t->string('environment');
             }
         );
