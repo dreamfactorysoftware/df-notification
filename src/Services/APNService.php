@@ -4,18 +4,13 @@ namespace DreamFactory\Core\Notification\Services;
 use DreamFactory\Core\Exceptions\InternalServerErrorException;
 use Sly\NotificationPusher\Adapter\Apns;
 use Sly\NotificationPusher\PushManager;
-use DreamFactory\Core\Notification\Resources\Push as PushResource;
+use DreamFactory\Core\Notification\Resources\APNSPush as PushResource;
 use DreamFactory\Core\Notification\Resources\Register as RegisterResource;
 
 class APNService extends BaseService
 {
+    /** @var null | string */
     protected $certificateFile = null;
-
-    /** @inheritdoc */
-    public function getResources($onlyHandlers = false)
-    {
-        return ($onlyHandlers) ? static::$resources : array_values(static::$resources);
-    }
 
     /** @type array Service Resources */
     protected static $resources = [
@@ -31,6 +26,13 @@ class APNService extends BaseService
         ],
     ];
 
+    /** {@inheritdoc} */
+    public function getResources($onlyHandlers = false)
+    {
+        return ($onlyHandlers) ? static::$resources : array_values(static::$resources);
+    }
+
+    /** {@inheritdoc} */
     protected function setPusher($config)
     {
         $environment = array_get($config, 'environment');
@@ -46,11 +48,22 @@ class APNService extends BaseService
                 'Please check service configuration for Certificate config.'
             );
         }
+
         $this->createCertificateFile($certificate);
+        $apnsConfig = ['certificate' => $this->certificateFile];
+        $passphrase = array_get($config, 'passphrase');
+        if (!empty($passphrase)) {
+            $apnsConfig['passPhrase'] = $passphrase;
+        }
         $this->pushManager = new PushManager($environment);
-        $this->pushAdapter = new Apns(['certificate' => $this->certificateFile]);
+        $this->pushAdapter = new Apns($apnsConfig);
     }
 
+    /**
+     * Constructs the certificate file (in tmp dir) from data stored in DB.
+     *
+     * @param $certificate
+     */
     protected function createCertificateFile($certificate)
     {
         $tmpDir = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
@@ -58,6 +71,11 @@ class APNService extends BaseService
         file_put_contents($this->certificateFile, $certificate);
     }
 
+    /**
+     * Deletes the certificate file.
+     *
+     * @return bool
+     */
     public function deleteCertificateFile()
     {
         @unlink($this->certificateFile);

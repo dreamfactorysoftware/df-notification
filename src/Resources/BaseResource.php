@@ -9,6 +9,11 @@ use Sly\NotificationPusher\Adapter\AdapterInterface;
 use DreamFactory\Core\Utility\Session;
 use DreamFactory\Core\Models\App;
 use DreamFactory\Core\Exceptions\InternalServerErrorException;
+use DreamFactory\Core\Exceptions\NotFoundException;
+use Sly\NotificationPusher\Model\Device;
+use Sly\NotificationPusher\Collection\DeviceCollection;
+use Sly\NotificationPusher\Model\Message;
+use Sly\NotificationPusher\Model\Push as Pusher;
 
 class BaseResource extends BaseRestResource
 {
@@ -30,6 +35,8 @@ class BaseResource extends BaseRestResource
     }
 
     /**
+     * Returns the push manager from the push service.
+     *
      * @return null|\Sly\NotificationPusher\PushManager
      */
     protected function getPushManager()
@@ -42,6 +49,8 @@ class BaseResource extends BaseRestResource
     }
 
     /**
+     * Returns the push adapter from the push service.
+     *
      * @return null|\Sly\NotificationPusher\Adapter\AdapterInterface
      */
     protected function getPushAdapter()
@@ -54,6 +63,8 @@ class BaseResource extends BaseRestResource
     }
 
     /**
+     * Gets the push message from request.
+     *
      * @return string
      * @throws \DreamFactory\Core\Exceptions\BadRequestException
      */
@@ -68,6 +79,20 @@ class BaseResource extends BaseRestResource
     }
 
     /**
+     * Gets the push message model.
+     *
+     * @return \Sly\NotificationPusher\Model\Message
+     */
+    protected function getPushMessage()
+    {
+        $message = $this->getMessage();
+
+        return new Message($message);
+    }
+
+    /**
+     * Gets the DF API Key from request.
+     *
      * @param bool $throw
      *
      * @return string|null
@@ -87,14 +112,16 @@ class BaseResource extends BaseRestResource
     }
 
     /**
+     * Gets device token from request or by DF API Key.
+     *
      * @return array
      * @throws \DreamFactory\Core\Exceptions\BadRequestException
      */
     protected function getDeviceToken()
     {
-        $apiKey = $this->getApiKey();
         $deviceToken = $this->request->getPayloadData('device_token');
         if (empty($deviceToken)) {
+            $apiKey = $this->getApiKey();
             if (empty($apiKey)) {
                 throw new BadRequestException(
                     'No API Key and/or Device Token found. ' .
@@ -112,6 +139,8 @@ class BaseResource extends BaseRestResource
     }
 
     /**
+     * Gets device token by DF API Key.
+     *
      * @param $apiKey
      *
      * @return array
@@ -142,6 +171,37 @@ class BaseResource extends BaseRestResource
     }
 
     /**
+     * Returns push device collection based on request (device tokens).
+     *
+     * @param boolean $gcm
+     *
+     * @return \Sly\NotificationPusher\Collection\DeviceCollection
+     * @throws \DreamFactory\Core\Exceptions\NotFoundException
+     */
+    protected function getDeviceCollection($gcm = false)
+    {
+        $deviceToken = $this->getDeviceToken();
+        if (empty($deviceToken)) {
+            throw new NotFoundException(
+                'Failed to push notification. No registered devices found for your application.'
+            );
+        }
+        foreach ($deviceToken as $key => $token) {
+            if ($gcm === true) {
+                $pushDevice = new Device($token);
+            } else {
+                $pushDevice = new Device(strtolower($token));
+            }
+
+            $deviceToken[$key] = $pushDevice;
+        }
+
+        return new DeviceCollection($deviceToken);
+    }
+
+    /**
+     * Fetches device tokens by app id.
+     *
      * @param $appId
      *
      * @return array
@@ -157,6 +217,8 @@ class BaseResource extends BaseRestResource
     }
 
     /**
+     * Gets app id by API Key.
+     *
      * @param $apiKey
      *
      * @return int
@@ -173,5 +235,22 @@ class BaseResource extends BaseRestResource
         }
 
         return $appId;
+    }
+
+    /**
+     * Pushes notification.
+     *
+     * @param \Sly\NotificationPusher\Model\Message               $message
+     * @param \Sly\NotificationPusher\Collection\DeviceCollection $devices
+     *
+     * @return \Sly\NotificationPusher\Collection\PushCollection
+     */
+    protected function push(Message $message, DeviceCollection $devices)
+    {
+        $push = new Pusher($this->getPushAdapter(), $devices, $message);
+        $this->getPushManager()->add($push);
+        $result = $this->getPushManager()->push();
+
+        return $result;
     }
 }

@@ -6,12 +6,14 @@ use Sly\NotificationPusher\PushManager;
 
 class ApnsConfig extends BaseServiceConfigModel
 {
+    /** @var string */
     protected $table = 'apns_config';
 
     /** @var array */
     protected $fillable = [
         'service_id',
         'certificate',
+        'passphrase',
         'environment'
     ];
 
@@ -21,7 +23,10 @@ class ApnsConfig extends BaseServiceConfigModel
     ];
 
     /** @var array */
-    protected $encrypted = ['certificate'];
+    protected $encrypted = ['certificate', 'passphrase'];
+
+    /** @var array */
+    protected $protected = ['passphrase'];
 
     /**
      * {@inheritdoc}
@@ -42,6 +47,11 @@ class ApnsConfig extends BaseServiceConfigModel
                     '</pre>' .
                     'Replace  my-certificate-file.p12 with the name of the certificate file you exported ' .
                     'from Keychain Access.';
+                break;
+            case 'passphrase':
+                $schema['type'] = 'password';
+                $schema['label'] = 'Passphrase';
+                $schema['description'] = 'If your certificate requires a Passphrase then enter it here.';
                 break;
             case 'environment':
                 $schema['type'] = 'picklist';

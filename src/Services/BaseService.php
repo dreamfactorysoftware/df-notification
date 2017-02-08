@@ -15,6 +15,13 @@ abstract class BaseService extends BaseRestService
     /** @var null | AdapterInterface */
     protected $pushAdapter = null;
 
+    /**
+     * BaseService constructor.
+     *
+     * @param array $settings
+     *
+     * @throws \DreamFactory\Core\Exceptions\InternalServerErrorException
+     */
     public function __construct(array $settings = [])
     {
         parent::__construct($settings);
@@ -29,9 +36,17 @@ abstract class BaseService extends BaseRestService
         $this->setPusher($config);
     }
 
+    /**
+     * Sets the push manager and push adapter to be used in resources.
+     *
+     * @param $config
+     * @throws InternalServerErrorException
+     */
     abstract protected function setPusher($config);
 
     /**
+     * Returns the push manager.
+     *
      * @return null|\Sly\NotificationPusher\PushManager
      */
     public function getPushManager()
@@ -40,6 +55,8 @@ abstract class BaseService extends BaseRestService
     }
 
     /**
+     * Returns the push adapter.
+     *
      * @return null|\Sly\NotificationPusher\Adapter\AdapterInterface
      */
     public function getPushAdapter()

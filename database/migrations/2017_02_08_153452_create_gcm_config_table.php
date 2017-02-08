@@ -1,9 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateApnsConfigTable extends Migration
+class CreateGcmConfigTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,14 +13,13 @@ class CreateApnsConfigTable extends Migration
      */
     public function up()
     {
-        // Create APNS config table
+        // Create GCM config table
         Schema::create(
-            'apns_config',
+            'gcm_config',
             function (Blueprint $t){
                 $t->integer('service_id')->unsigned()->primary();
                 $t->foreign('service_id')->references('id')->on('service')->onDelete('cascade');
-                $t->longText('certificate');
-                $t->text('passphrase')->nullable();
+                $t->text('api_key');
                 $t->string('environment');
             }
         );
@@ -32,7 +32,7 @@ class CreateApnsConfigTable extends Migration
      */
     public function down()
     {
-        // Drop APNS config table if exists
-        Schema::dropIfExists('apns_config');
+        // Drop GCM config table if exits
+        Schema::dropIfExists('gcm_config');
     }
 }

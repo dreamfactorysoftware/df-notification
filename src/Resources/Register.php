@@ -16,6 +16,8 @@ class Register extends BaseResource
     const RESOURCE_NAME = 'register';
 
     /**
+     * Handles fetching registered devices.
+     *
      * @return array
      */
     protected function handleGET()
@@ -34,6 +36,8 @@ class Register extends BaseResource
     }
 
     /**
+     * Handles device registration.
+     *
      * @return \DreamFactory\Core\Utility\ServiceResponse
      * @throws \DreamFactory\Core\Exceptions\BadRequestException
      * @throws \DreamFactory\Core\Exceptions\ConflictResourceException
@@ -45,7 +49,6 @@ class Register extends BaseResource
         if (empty($deviceToken)) {
             throw new BadRequestException('No Device Token found. Please provide a valid Device Token.');
         }
-        $deviceToken = strtolower($deviceToken);
         $serviceId = $this->getParent()->getServiceId();
         $appId = $this->getAppId($apiKey);
         $existingTokens = $this->getDeviceTokenByApiKey($apiKey);
@@ -63,6 +66,8 @@ class Register extends BaseResource
     }
 
     /**
+     * Handles updating device registration.
+     *
      * @return \DreamFactory\Core\Utility\ServiceResponse
      * @throws \DreamFactory\Core\Exceptions\BadRequestException
      * @throws \DreamFactory\Core\Exceptions\NotFoundException
@@ -104,6 +109,8 @@ class Register extends BaseResource
     }
 
     /**
+     * Handles updating device registration.
+     *
      * @return \DreamFactory\Core\Utility\ServiceResponse
      */
     protected function handlePATCH()
@@ -112,6 +119,8 @@ class Register extends BaseResource
     }
 
     /**
+     * Handles deleting registered devices.
+     *
      * @return array
      */
     protected function handleDELETE()
