@@ -3,9 +3,11 @@ namespace DreamFactory\Core\Notification\Services;
 
 use DreamFactory\Core\Exceptions\InternalServerErrorException;
 use Sly\NotificationPusher\Adapter\Apns;
+use Sly\NotificationPusher\Model\Device;
 use Sly\NotificationPusher\PushManager;
 use DreamFactory\Core\Notification\Resources\APNSPush as PushResource;
 use DreamFactory\Core\Notification\Resources\Register as RegisterResource;
+use DreamFactory\Core\Notification\Resources\APNFeedback as FeedbackResource;
 
 class APNService extends BaseService
 {
@@ -24,12 +26,22 @@ class APNService extends BaseService
             'class_name' => RegisterResource::class,
             'label'      => 'Register'
         ],
+        FeedbackResource::RESOURCE_NAME => [
+            'name'       => FeedbackResource::RESOURCE_NAME,
+            'class_name' => FeedbackResource::class,
+            'label'      => 'Feedback'
+        ],
     ];
 
     /** {@inheritdoc} */
     public function getResources($onlyHandlers = false)
     {
         return ($onlyHandlers) ? static::$resources : array_values(static::$resources);
+    }
+
+    public function getDevice($token)
+    {
+        return new Device(strtolower($token));
     }
 
     /** {@inheritdoc} */

@@ -3,6 +3,7 @@ namespace DreamFactory\Core\Notification\Resources;
 
 use DreamFactory\Core\Exceptions\BadRequestException;
 use DreamFactory\Core\Notification\Models\NotificationAppDevice;
+use DreamFactory\Core\Notification\Services\BaseService;
 use DreamFactory\Core\Resources\BaseRestResource;
 use Sly\NotificationPusher\PushManager;
 use Sly\NotificationPusher\Adapter\AdapterInterface;
@@ -13,8 +14,13 @@ use DreamFactory\Core\Exceptions\NotFoundException;
 use Sly\NotificationPusher\Model\Device;
 use Sly\NotificationPusher\Collection\DeviceCollection;
 use Sly\NotificationPusher\Model\Message;
-use Sly\NotificationPusher\Model\Push as Pusher;
 
+/**
+ * Class BaseResource
+ *
+ * @method BaseService getParent()
+ * @package DreamFactory\Core\Notification\Resources
+ */
 class BaseResource extends BaseRestResource
 {
     /** A resource identifier used in swagger doc. */
@@ -128,7 +134,7 @@ class BaseResource extends BaseRestResource
                     'Please provide a valid API Key or Device Token for your push notification.'
                 );
             }
-            $deviceToken = $this->getDeviceTokenByApiKey($apiKey);
+            $deviceToken = $this->getParent()->getDeviceTokenByApiKey($apiKey);
         }
 
         if (!is_array($deviceToken)) {
@@ -139,81 +145,24 @@ class BaseResource extends BaseRestResource
     }
 
     /**
-     * Gets device token by DF API Key.
-     *
-     * @param $apiKey
-     *
-     * @return array
-     * @throws \DreamFactory\Core\Exceptions\InternalServerErrorException
-     */
-    protected function getDeviceTokenByApiKey($apiKey)
-    {
-        if (empty($apiKey)) {
-            throw new InternalServerErrorException(
-                'Invalid API Key. Valid API Key is required for retrieving Device Tokens.'
-            );
-        }
-        $appId = App::getAppIdByApiKey($apiKey);
-        if (empty($appId)) {
-            throw new InternalServerErrorException(
-                'Unexpected error occurred. No App ID found for API Key provided. ' .
-                'Please clear DreamFactory cache and try again.'
-            );
-        }
-
-        $records = $this->fetchAppDeviceMapping($appId);
-        $out = [];
-        foreach ($records as $record) {
-            $out[] = $record['device_token'];
-        }
-
-        return $out;
-    }
-
-    /**
      * Returns push device collection based on request (device tokens).
-     *
-     * @param boolean $gcm
      *
      * @return \Sly\NotificationPusher\Collection\DeviceCollection
      * @throws \DreamFactory\Core\Exceptions\NotFoundException
      */
-    protected function getDeviceCollection($gcm = false)
+    protected function getDeviceCollection()
     {
         $deviceToken = $this->getDeviceToken();
         if (empty($deviceToken)) {
             throw new NotFoundException(
-                'Failed to push notification. No registered devices found for your application.'
+                'Failed to send push notification. No registered devices found for your application.'
             );
         }
         foreach ($deviceToken as $key => $token) {
-            if ($gcm === true) {
-                $pushDevice = new Device($token);
-            } else {
-                $pushDevice = new Device(strtolower($token));
-            }
-
-            $deviceToken[$key] = $pushDevice;
+            $deviceToken[$key] = $this->getParent()->getDevice($token);
         }
 
         return new DeviceCollection($deviceToken);
-    }
-
-    /**
-     * Fetches device tokens by app id.
-     *
-     * @param $appId
-     *
-     * @return array
-     */
-    protected function fetchAppDeviceMapping($appId)
-    {
-        $serviceId = $this->getParent()->getServiceId();
-        $appDeviceToken = NotificationAppDevice::where('app_id', $appId)
-            ->where('service_id', $serviceId)
-            ->get();
-
-        return $appDeviceToken->toArray();
     }
 
     /**
@@ -247,10 +196,6 @@ class BaseResource extends BaseRestResource
      */
     protected function push(Message $message, DeviceCollection $devices)
     {
-        $push = new Pusher($this->getPushAdapter(), $devices, $message);
-        $this->getPushManager()->add($push);
-        $result = $this->getPushManager()->push();
-
-        return $result;
+        return $this->getParent()->push($message, $devices);
     }
 }

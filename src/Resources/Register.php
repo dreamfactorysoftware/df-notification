@@ -31,7 +31,7 @@ class Register extends BaseResource
         } else {
             $appId = $this->getAppId($apiKey);
 
-            return ResourcesWrapper::wrapResources($this->fetchAppDeviceMapping($appId));
+            return ResourcesWrapper::wrapResources($this->getParent()->fetchAppDeviceMapping($appId));
         }
     }
 
@@ -51,7 +51,7 @@ class Register extends BaseResource
         }
         $serviceId = $this->getParent()->getServiceId();
         $appId = $this->getAppId($apiKey);
-        $existingTokens = $this->getDeviceTokenByApiKey($apiKey);
+        $existingTokens = $this->getParent()->getDeviceTokenByApiKey($apiKey);
         if (!in_array($deviceToken, $existingTokens)) {
             $model = NotificationAppDevice::create([
                 'service_id'   => $serviceId,
@@ -88,7 +88,7 @@ class Register extends BaseResource
         $serviceId = $this->getParent()->getServiceId();
         $appId = $this->getAppId($apiKey);
 
-        $records = $this->fetchAppDeviceMapping($appId);
+        $records = $this->getParent()->fetchAppDeviceMapping($appId);
         foreach ($records as $record) {
             if ($record['device_token'] === $oldToken) {
                 NotificationAppDevice::deleteById($record['id']);

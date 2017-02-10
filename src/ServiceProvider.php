@@ -3,12 +3,14 @@ namespace DreamFactory\Core\Notification;
 
 use DreamFactory\Core\Components\ServiceDocBuilder;
 use DreamFactory\Core\Enums\ServiceTypeGroups;
+use DreamFactory\Core\Notification\Handlers\Events\PushEventHandler;
 use DreamFactory\Core\Notification\Models\ApnsConfig;
 use DreamFactory\Core\Notification\Models\GcmConfig;
 use DreamFactory\Core\Notification\Services\APNService;
 use DreamFactory\Core\Notification\Services\GCMService;
 use DreamFactory\Core\Services\ServiceManager;
 use DreamFactory\Core\Services\ServiceType;
+use Event;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
@@ -53,5 +55,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
         // add migrations
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+
+        Event::subscribe(new PushEventHandler());
     }
 }

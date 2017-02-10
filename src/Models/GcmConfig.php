@@ -3,9 +3,13 @@ namespace DreamFactory\Core\Notification\Models;
 
 use DreamFactory\Core\Models\BaseServiceConfigModel;
 use Sly\NotificationPusher\PushManager;
+use DreamFactory\Core\Components\ServiceEventMapper;
+use DreamFactory\Core\Models\ServiceEventMap;
 
 class GcmConfig extends BaseServiceConfigModel
 {
+    use ServiceEventMapper;
+
     protected $table = 'gcm_config';
 
     /** @var array */
@@ -22,6 +26,25 @@ class GcmConfig extends BaseServiceConfigModel
 
     /** @var array */
     protected $encrypted = ['api_key'];
+
+    /** {@inheritdoc} */
+    public static function getConfigSchema()
+    {
+        $schema = parent::getConfigSchema();
+        $sem = ServiceEventMap::getConfigSchema();
+        $sem['items'] = [
+            $sem['items'][0],
+            [
+                'type'  => 'text',
+                'name'  => 'data',
+                'label' => 'Message'
+            ]
+        ];
+
+        $schema[] = $sem;
+
+        return $schema;
+    }
 
     /**
      * {@inheritdoc}

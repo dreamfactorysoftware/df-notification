@@ -13,11 +13,16 @@ class APNSPush extends BaseResource
      */
     protected function handlePOST()
     {
-        $message = $this->getPushMessage();
-        $devices = $this->getDeviceCollection();
-        $result = $this->push($message, $devices);
-        $this->getParent()->deleteCertificateFile();
+        try {
+            $message = $this->getPushMessage();
+            $devices = $this->getDeviceCollection();
+            $this->push($message, $devices);
+            // Clear temporary certificate file.
+            $this->getParent()->deleteCertificateFile();
 
-        return ['count' => $result->count()];
+            return ['success' => true];
+        } catch (\Exception $e) {
+            return ['success' => false, 'error' => $e->getMessage()];
+        }
     }
 }

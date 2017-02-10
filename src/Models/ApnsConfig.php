@@ -1,11 +1,15 @@
 <?php
 namespace DreamFactory\Core\Notification\Models;
 
+use DreamFactory\Core\Components\ServiceEventMapper;
 use DreamFactory\Core\Models\BaseServiceConfigModel;
 use Sly\NotificationPusher\PushManager;
+use DreamFactory\Core\Models\ServiceEventMap;
 
 class ApnsConfig extends BaseServiceConfigModel
 {
+    use ServiceEventMapper;
+
     /** @var string */
     protected $table = 'apns_config';
 
@@ -27,6 +31,25 @@ class ApnsConfig extends BaseServiceConfigModel
 
     /** @var array */
     protected $protected = ['passphrase'];
+
+    /** {@inheritdoc} */
+    public static function getConfigSchema()
+    {
+        $schema = parent::getConfigSchema();
+        $sem = ServiceEventMap::getConfigSchema();
+        $sem['items'] = [
+            $sem['items'][0],
+            [
+                'type'  => 'text',
+                'name'  => 'data',
+                'label' => 'Message'
+            ]
+        ];
+
+        $schema[] = $sem;
+
+        return $schema;
+    }
 
     /**
      * {@inheritdoc}
