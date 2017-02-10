@@ -2,7 +2,6 @@
 namespace DreamFactory\Core\Notification\Resources;
 
 use DreamFactory\Core\Exceptions\BadRequestException;
-use DreamFactory\Core\Notification\Models\NotificationAppDevice;
 use DreamFactory\Core\Notification\Services\BaseService;
 use DreamFactory\Core\Resources\BaseRestResource;
 use Sly\NotificationPusher\PushManager;
@@ -11,7 +10,6 @@ use DreamFactory\Core\Utility\Session;
 use DreamFactory\Core\Models\App;
 use DreamFactory\Core\Exceptions\InternalServerErrorException;
 use DreamFactory\Core\Exceptions\NotFoundException;
-use Sly\NotificationPusher\Model\Device;
 use Sly\NotificationPusher\Collection\DeviceCollection;
 use Sly\NotificationPusher\Model\Message;
 

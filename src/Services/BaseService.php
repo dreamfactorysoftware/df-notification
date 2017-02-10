@@ -46,10 +46,16 @@ abstract class BaseService extends BaseRestService
      * Sets the push manager and push adapter to be used in resources.
      *
      * @param $config
+     *
      * @throws InternalServerErrorException
      */
     abstract protected function setPusher($config);
 
+    /**
+     * @param string $token
+     *
+     * @return \Sly\NotificationPusher\Model\Device
+     */
     abstract public function getDevice($token);
 
     /**
@@ -72,6 +78,11 @@ abstract class BaseService extends BaseRestService
         return $this->pushAdapter;
     }
 
+    /**
+     * Returns service name.
+     *
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
@@ -143,6 +154,15 @@ abstract class BaseService extends BaseRestService
         return $appDeviceToken->toArray();
     }
 
+    /**
+     * Send push notification by API Key
+     *
+     * @param $message
+     * @param $apiKey
+     *
+     * @return \Sly\NotificationPusher\Collection\PushCollection
+     * @throws \DreamFactory\Core\Exceptions\NotFoundException
+     */
     public function pushByApiKey($message, $apiKey)
     {
         $devices = $this->getDeviceTokenByApiKey($apiKey);
@@ -156,6 +176,7 @@ abstract class BaseService extends BaseRestService
         }
         $deviceCollection = new DeviceCollection($devices);
         $message = new Message($message);
+
         return $this->push($message, $deviceCollection);
     }
 }

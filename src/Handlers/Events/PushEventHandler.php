@@ -1,18 +1,10 @@
 <?php
 namespace DreamFactory\Core\Notification\Handlers\Events;
 
-use DreamFactory\Core\Contracts\ServiceResponseInterface;
 use DreamFactory\Core\Events\ServiceEvent;
 use DreamFactory\Core\Notification\Services\BaseService as PushServices;
-use DreamFactory\Core\Notification\Services\GCMService;
-use DreamFactory\Library\Utility\Enums\Verbs;
 use Illuminate\Contracts\Events\Dispatcher;
-use DreamFactory\Core\Models\App;
 use Log;
-use Sly\NotificationPusher\Collection\DeviceCollection;
-use Sly\NotificationPusher\Model\Device;
-use DreamFactory\Core\Notification\Models\NotificationAppDevice;
-use Sly\NotificationPusher\Model\Message;
 
 class PushEventHandler
 {

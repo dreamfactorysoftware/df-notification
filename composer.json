@@ -3,9 +3,11 @@
   "description": "iOS and GCM push notification support for DreamFactory",
   "keywords":    [
     "dreamfactory",
-    "ios",
+    "iOS",
+    "APNS",
     "android",
-    "gcm",
+    "google",
+    "GCM",
     "push",
     "notification",
     "apple"

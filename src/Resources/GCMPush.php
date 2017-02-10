@@ -19,7 +19,7 @@ class GCMPush extends BaseResource
             $this->push($message, $devices);
 
             return ['success' => true];
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             return ['success' => false, 'error' => $e->getMessage()];
         }
     }

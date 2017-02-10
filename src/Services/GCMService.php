@@ -30,6 +30,7 @@ class GCMService extends BaseService
         return ($onlyHandlers) ? static::$resources : array_values(static::$resources);
     }
 
+    /** {@inheritdoc} */
     public function getDevice($token)
     {
         return new Device($token);
