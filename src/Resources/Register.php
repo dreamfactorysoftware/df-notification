@@ -132,4 +132,196 @@ class Register extends BaseResource
 
         return ['success' => true];
     }
+
+    /** {@inheritdoc} */
+    public static function getApiDocInfo($service, array $resource = [])
+    {
+        $base = parent::getApiDocInfo($service, $resource);
+        $serviceName = strtolower($service);
+        $class = trim(strrchr(static::class, '\\'), '\\');
+        $resourceName = strtolower(array_get($resource, 'name', $class));
+        $path = '/' . $serviceName . '/' . $resourceName;
+
+        $base['paths'][$path] = [
+            'get'    => [
+                'tags'        => [$serviceName],
+                'summary'     => 'getRegisteredDevices() - Retrieves registered device tokens',
+                'operationId' => 'getRegisteredDevices',
+                'consumes'    => ['application/json', 'application/xml'],
+                'produces'    => ['application/json', 'application/xml'],
+                'description' => 'Retrieves registered device tokens',
+                'parameters'  => [
+                    [
+                        'name'        => 'api_key',
+                        'type'        => 'string',
+                        'description' => 'DreamFactory application API Key',
+                        'in'          => 'query',
+                        'required'    => false,
+                    ],
+                ],
+                'responses'   => [
+                    '200'     => [
+                        'description' => 'Success',
+                        'schema'      => [
+                            'type'       => 'object',
+                            'properties' => [
+                                'resource' => [
+                                    'type'  => 'array',
+                                    'items' => [
+                                        'type'       => 'object',
+                                        'properties' => [
+                                            'id'                  => ['type' => 'integer'],
+                                            'service_id'          => ['type' => 'integer'],
+                                            'app_id'              => ['type' => 'integer'],
+                                            'device_token'        => ['type' => 'string'],
+                                            'created_date'        => ['type' => 'string'],
+                                            'last_modified_date'  => ['type' => 'string'],
+                                            'created_by_id'       => ['type' => 'integer'],
+                                            'last_modified_by_id' => ['type' => 'integer'],
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ],
+                    'default' => [
+                        'description' => 'Error',
+                        'schema'      => ['$ref' => '#/definitions/Error']
+                    ]
+                ],
+            ],
+            'post'   => [
+                'tags'        => [$serviceName],
+                'summary'     => 'registerDeviceToken() - Register device token',
+                'operationId' => 'registerDeviceToken',
+                'consumes'    => ['application/json', 'application/xml'],
+                'produces'    => ['application/json', 'application/xml'],
+                'description' => 'Registers device token with an application using API Key.',
+                'parameters'  => [
+                    [
+                        'name'        => 'api_key',
+                        'type'        => 'string',
+                        'description' => 'DreamFactory application API Key. Only required when no API Key is provided in request headers.',
+                        'in'          => 'query',
+                        'required'    => false,
+                    ],
+                    [
+                        'name'        => 'body',
+                        'description' => 'Device token to register',
+                        'schema'      => [
+                            'type'       => 'object',
+                            'properties' => [
+                                'device_token' => [
+                                    'type'        => 'string',
+                                    'description' => 'Target device token to register. '
+                                ]
+                            ]
+                        ],
+                        'in'          => 'body',
+                        'required'    => true
+                    ]
+                ],
+                'responses'   => [
+                    '200'     => [
+                        'description' => 'Success',
+                        'schema'      => [
+                            'type'       => 'object',
+                            'properties' => [
+                                'id' => ['type' => 'integer']
+                            ]
+                        ]
+                    ],
+                    'default' => [
+                        'description' => 'Error',
+                        'schema'      => ['$ref' => '#/definitions/Error']
+                    ]
+                ],
+            ],
+            'put'    => [
+                'tags'        => [$serviceName],
+                'summary'     => 'updateDeviceToken() - Update/Replace device token',
+                'operationId' => 'updateDeviceToken',
+                'consumes'    => ['application/json', 'application/xml'],
+                'produces'    => ['application/json', 'application/xml'],
+                'description' => 'Update/Replace existing device token.',
+                'parameters'  => [
+                    [
+                        'name'        => 'api_key',
+                        'type'        => 'string',
+                        'description' => 'DreamFactory application API Key. Only required when no API Key is provided in request headers.',
+                        'in'          => 'query',
+                        'required'    => false,
+                    ],
+                    [
+                        'name'        => 'body',
+                        'description' => 'Device Token to update/replace.',
+                        'schema'      => [
+                            'type'       => 'object',
+                            'properties' => [
+                                'old_token' => [
+                                    'type'        => 'string',
+                                    'description' => 'Old device token to replace. '
+                                ],
+                                'new_token' => [
+                                    'type'        => 'string',
+                                    'description' => 'New device token to replace with. '
+                                ]
+                            ]
+                        ],
+                        'in'          => 'body',
+                        'required'    => true
+                    ]
+                ],
+                'responses'   => [
+                    '200'     => [
+                        'description' => 'Success',
+                        'schema'      => [
+                            'type'       => 'object',
+                            'properties' => [
+                                'id' => ['type' => 'integer']
+                            ]
+                        ]
+                    ],
+                    'default' => [
+                        'description' => 'Error',
+                        'schema'      => ['$ref' => '#/definitions/Error']
+                    ]
+                ],
+            ],
+            'delete' => [
+                'tags'        => [$serviceName],
+                'summary'     => 'deleteDeviceToken() - Delete device token',
+                'operationId' => 'deleteDeviceToken',
+                'consumes'    => ['application/json', 'application/xml'],
+                'produces'    => ['application/json', 'application/xml'],
+                'description' => 'Deletes all device tokens registered by an API Key (App).',
+                'parameters'  => [
+                    [
+                        'name'        => 'api_key',
+                        'type'        => 'string',
+                        'description' => 'DreamFactory application API Key. Only required when no API Key is provided in request headers.',
+                        'in'          => 'query',
+                        'required'    => false,
+                    ]
+                ],
+                'responses'   => [
+                    '200'     => [
+                        'description' => 'Success',
+                        'schema'      => [
+                            'type'       => 'object',
+                            'properties' => [
+                                'success' => ['type' => 'boolean']
+                            ]
+                        ]
+                    ],
+                    'default' => [
+                        'description' => 'Error',
+                        'schema'      => ['$ref' => '#/definitions/Error']
+                    ]
+                ],
+            ]
+        ];
+
+        return $base;
+    }
 }

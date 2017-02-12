@@ -21,6 +21,9 @@ abstract class BaseService extends BaseRestService
     /** @var null | AdapterInterface */
     protected $pushAdapter = null;
 
+    /** @var array */
+    protected static $resources = [];
+
     /**
      * BaseService constructor.
      *
@@ -178,5 +181,39 @@ abstract class BaseService extends BaseRestService
         $message = new Message($message);
 
         return $this->push($message, $deviceCollection);
+    }
+
+    /** @inheritdoc */
+    public static function getApiDocInfo($service)
+    {
+        $base = parent::getApiDocInfo($service);
+
+        $apis = [];
+        $models = [];
+        foreach (static::$resources as $resourceInfo) {
+            $resourceClass = array_get($resourceInfo, 'class_name');
+
+            if (!class_exists($resourceClass)) {
+                throw new InternalServerErrorException('Service configuration class name lookup failed for resource ' .
+                    $resourceClass);
+            }
+
+            $resourceName = array_get($resourceInfo, static::RESOURCE_IDENTIFIER);
+            if (Session::checkForAnyServicePermissions($service->name, $resourceName)) {
+                $results = $resourceClass::getApiDocInfo($service->name, $resourceInfo);
+                if (isset($results, $results['paths'])) {
+                    $apis = array_merge($apis, $results['paths']);
+                }
+                if (isset($results, $results['definitions'])) {
+                    $models = array_merge($models, $results['definitions']);
+                }
+            }
+        }
+
+        $base['paths'] = array_merge($base['paths'], $apis);
+        $base['definitions'] = array_merge($base['definitions'], $models);
+        unset($base['paths']['/' . $service->name]['get']['parameters']);
+
+        return $base;
     }
 }
