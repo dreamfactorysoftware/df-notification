@@ -21,6 +21,12 @@ class GCMPush extends BaseResource
     }
 
     /** {@inheritdoc} */
+    protected function getMessageOption()
+    {
+        return $this->request->getPayloadData('data', []);
+    }
+
+    /** {@inheritdoc} */
     public static function getApiDocInfo($service, array $resource = [])
     {
         $base = parent::getApiDocInfo($service, $resource);
@@ -53,6 +59,10 @@ class GCMPush extends BaseResource
                             'message'      => [
                                 'type'        => 'string',
                                 'description' => 'Push notification message'
+                            ],
+                            'data'         => [
+                                'type'        => 'object',
+                                'description' => 'Any custom data to send with notification.'
                             ],
                             'device_token' => [
                                 'type'        => 'string',

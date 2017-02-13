@@ -91,7 +91,17 @@ class BaseResource extends BaseRestResource
     {
         $message = $this->getMessage();
 
-        return new Message($message);
+        return new Message($message, $this->getMessageOption());
+    }
+
+    /**
+     * Gets the message options (badge, sound, custom data etc.)
+     *
+     * @return array
+     */
+    protected function getMessageOption()
+    {
+        return [];
     }
 
     /**
