@@ -126,6 +126,25 @@ class BaseResource extends BaseRestResource
     }
 
     /**
+     * Gets the App name based on request API key.
+     *
+     * @return mixed
+     * @throws \DreamFactory\Core\Exceptions\InternalServerErrorException
+     */
+    protected function getAppName()
+    {
+        $appId = $this->getAppId($this->getApiKey(true));
+        $app = App::find($appId);
+        if (empty($app)) {
+            throw new InternalServerErrorException(
+                'Unexpected error occurred. No application found by App ID [' . $appId . ']'
+            );
+        }
+
+        return $app->name;
+    }
+
+    /**
      * Gets device token from request or by DF API Key.
      *
      * @return array
@@ -163,7 +182,9 @@ class BaseResource extends BaseRestResource
         $deviceToken = $this->getDeviceToken();
         if (empty($deviceToken)) {
             throw new NotFoundException(
-                'Failed to send push notification. No registered devices found for your application.'
+                'Failed to send push notification. No registered devices found for your application [' .
+                $this->getAppName() .
+                ']'
             );
         }
         foreach ($deviceToken as $key => $token) {
