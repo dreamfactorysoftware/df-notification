@@ -83,8 +83,6 @@ class Register extends BaseResource
         if (empty($newToken)) {
             throw new BadRequestException('New token not found. Please provide the new token that you are replacing the old token with.');
         }
-        $oldToken = strtolower($oldToken);
-        $newToken = strtolower($newToken);
         $serviceId = $this->getParent()->getServiceId();
         $appId = $this->getAppId($apiKey);
 
