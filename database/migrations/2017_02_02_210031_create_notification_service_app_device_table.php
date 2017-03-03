@@ -27,7 +27,7 @@ class CreateNotificationServiceAppDeviceTable extends Migration
                 $t->integer('app_id')->unsigned()->nullable();
                 $t->foreign('app_id')->references('id')->on('app')->onDelete('cascade');
                 $t->text('device_token');
-                $t->timestamp('created_date')->useCurrent();
+                $t->timestamp('created_date')->nullable();
                 $t->timestamp('last_modified_date')->useCurrent();
                 $t->integer('created_by_id')->unsigned()->nullable();
                 $t->foreign('created_by_id')->references('id')->on('user')->onDelete($userOnDelete);
