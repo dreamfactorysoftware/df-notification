@@ -1,2 +1,2 @@
 # df-notification
-iOS and GCM push notification support for DreamFactory
+iOS and Android (GCM) push notification support for DreamFactory
