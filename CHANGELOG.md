@@ -7,7 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 ### Fixed
 
-## 0.1.0 - 2017-02-08
+## 0.1.0 - 2017-03-03
 First official release of this library.
 
-[Unreleased]: https://github.com/dreamfactorysoftware/df-saml/compare/0.1.0...HEAD
+[Unreleased]: https://github.com/dreamfactorysoftware/df-notification/compare/0.1.0...HEAD
