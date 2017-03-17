@@ -45,6 +45,22 @@ abstract class BaseService extends BaseRestService
         $this->setPusher($config);
     }
 
+    /** {@inheritdoc} */
+    public function getAccessList()
+    {
+        if (!empty($this->getPermissions())) {
+            $list = ['', '*'];
+            $resources = $this->getResources();
+            foreach ($resources as $resource){
+                $list[] = array_get($resource, 'name') . '/';
+            }
+
+            return $list;
+        }
+
+        return [];
+    }
+
     /**
      * Sets the push manager and push adapter to be used in resources.
      *
