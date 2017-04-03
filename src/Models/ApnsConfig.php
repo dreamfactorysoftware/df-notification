@@ -32,21 +32,23 @@ class ApnsConfig extends BaseServiceConfigModel
     /** @var array */
     protected $protected = ['passphrase'];
 
-    /** {@inheritdoc} */
+    /**
+     * {@inheritdoc}
+     */
     public static function getConfigSchema()
     {
         $schema = parent::getConfigSchema();
         $sem = ServiceEventMap::getConfigSchema();
-        $sem['items'] = [
-            $sem['items'][0],
-            [
-                'type'  => 'text',
-                'name'  => 'data',
-                'label' => 'Message'
-            ]
+        $sem[1]['label'] = 'Message';
+        $schema[] = [
+            'name'        => 'service_event_map',
+            'label'       => 'Service Event',
+            'description' => 'Select event(s) when you would like this service to fire!',
+            'type'        => 'array',
+            'required'    => false,
+            'allow_null'  => true,
+            'items'       => $sem,
         ];
-
-        $schema[] = $sem;
 
         return $schema;
     }
