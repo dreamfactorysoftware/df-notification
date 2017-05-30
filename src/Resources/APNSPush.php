@@ -64,7 +64,7 @@ class APNSPush extends BaseResource
         unset($base['paths'][$path]['get']);
         $base['paths'][$path]['post'] = [
             'tags'        => [$serviceName],
-            'summary'     => 'sendPushNotification() - Perform authentication',
+            'summary'     => 'sendPushNotification() - Send push notification',
             'operationId' => 'sendPushNotification',
             'consumes'    => ['application/json', 'application/xml'],
             'produces'    => ['application/json', 'application/xml'],
