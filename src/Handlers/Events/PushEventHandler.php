@@ -1,7 +1,7 @@
 <?php
 namespace DreamFactory\Core\Notification\Handlers\Events;
 
-use DreamFactory\Core\Events\ServiceEvent;
+use DreamFactory\Core\Events\ServiceAssignedEvent;
 use DreamFactory\Core\Notification\Services\BaseService as PushServices;
 use Illuminate\Contracts\Events\Dispatcher;
 use Log;
@@ -17,14 +17,14 @@ class PushEventHandler
     {
         $events->listen(
             [
-                ServiceEvent::class,
+                ServiceAssignedEvent::class,
             ],
             static::class . '@handleSubEvent'
         );
     }
 
     /**
-     * @param ServiceEvent $event
+     * @param ServiceAssignedEvent $event
      */
     public function handleSubEvent($event)
     {
