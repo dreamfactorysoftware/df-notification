@@ -34,12 +34,6 @@ class APNService extends BaseService
     ];
 
     /** {@inheritdoc} */
-    public function getResources($onlyHandlers = false)
-    {
-        return ($onlyHandlers) ? static::$resources : array_values(static::$resources);
-    }
-
-    /** {@inheritdoc} */
     public function getDevice($token)
     {
         return new Device(strtolower($token));

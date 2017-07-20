@@ -1,17 +1,17 @@
 <?php
+
 namespace DreamFactory\Core\Notification\Services;
 
 use DreamFactory\Core\Exceptions\NotFoundException;
-use DreamFactory\Core\Services\BaseRestService;
-use DreamFactory\Core\Utility\Session;
 use DreamFactory\Core\Exceptions\InternalServerErrorException;
+use DreamFactory\Core\Models\App;
+use DreamFactory\Core\Notification\Models\NotificationAppDevice;
+use DreamFactory\Core\Services\BaseRestService;
 use Sly\NotificationPusher\Adapter\AdapterInterface;
 use Sly\NotificationPusher\Model\Message;
 use Sly\NotificationPusher\PushManager;
 use Sly\NotificationPusher\Collection\DeviceCollection;
 use Sly\NotificationPusher\Model\Push as Pusher;
-use DreamFactory\Core\Models\App;
-use DreamFactory\Core\Notification\Models\NotificationAppDevice;
 
 abstract class BaseService extends BaseRestService
 {
@@ -20,9 +20,6 @@ abstract class BaseService extends BaseRestService
 
     /** @var null | AdapterInterface */
     protected $pushAdapter = null;
-
-    /** @var array */
-    protected static $resources = [];
 
     /**
      * BaseService constructor.
@@ -35,14 +32,11 @@ abstract class BaseService extends BaseRestService
     {
         parent::__construct($settings);
 
-        $config = array_get($settings, 'config');
-        Session::replaceLookups($config, true);
-
-        if (empty($config)) {
+        if (empty($this->config)) {
             throw new InternalServerErrorException('No service configuration found for notification service.');
         }
 
-        $this->setPusher($config);
+        $this->setPusher($this->config);
     }
 
     /** {@inheritdoc} */
@@ -51,7 +45,7 @@ abstract class BaseService extends BaseRestService
         if (!empty($this->getPermissions())) {
             $list = ['', '*'];
             $resources = $this->getResources();
-            foreach ($resources as $resource){
+            foreach ($resources as $resource) {
                 $list[] = array_get($resource, 'name') . '/';
             }
 
@@ -197,39 +191,5 @@ abstract class BaseService extends BaseRestService
         $message = new Message($message);
 
         return $this->push($message, $deviceCollection);
-    }
-
-    /** @inheritdoc */
-    public static function getApiDocInfo($service)
-    {
-        $base = parent::getApiDocInfo($service);
-
-        $apis = [];
-        $models = [];
-        foreach (static::$resources as $resourceInfo) {
-            $resourceClass = array_get($resourceInfo, 'class_name');
-
-            if (!class_exists($resourceClass)) {
-                throw new InternalServerErrorException('Service configuration class name lookup failed for resource ' .
-                    $resourceClass);
-            }
-
-            $resourceName = array_get($resourceInfo, static::RESOURCE_IDENTIFIER);
-            if (Session::checkForAnyServicePermissions($service->name, $resourceName)) {
-                $results = $resourceClass::getApiDocInfo($service->name, $resourceInfo);
-                if (isset($results, $results['paths'])) {
-                    $apis = array_merge($apis, $results['paths']);
-                }
-                if (isset($results, $results['definitions'])) {
-                    $models = array_merge($models, $results['definitions']);
-                }
-            }
-        }
-
-        $base['paths'] = array_merge($base['paths'], $apis);
-        $base['definitions'] = array_merge($base['definitions'], $models);
-        unset($base['paths']['/' . $service->name]['get']['parameters']);
-
-        return $base;
     }
 }
