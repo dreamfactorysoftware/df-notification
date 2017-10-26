@@ -1,4 +1,5 @@
 <?php
+
 namespace DreamFactory\Core\Notification\Resources;
 
 class GCMPush extends BaseResource
@@ -27,68 +28,50 @@ class GCMPush extends BaseResource
     }
 
     /** {@inheritdoc} */
-    public static function getApiDocInfo($service, array $resource = [])
+    protected function getApiDocPaths()
     {
-        $base = parent::getApiDocInfo($service, $resource);
-        $serviceName = strtolower($service);
-        $class = trim(strrchr(static::class, '\\'), '\\');
-        $resourceName = strtolower(array_get($resource, 'name', $class));
-        $path = '/' . $serviceName . '/' . $resourceName;
-        unset($base['paths'][$path]['get']);
-        $base['paths'][$path]['post'] = [
-            'tags'        => [$serviceName],
-            'summary'     => 'sendPushNotification() - Perform authentication',
-            'operationId' => 'sendPushNotification',
-            'consumes'    => ['application/json', 'application/xml'],
-            'produces'    => ['application/json', 'application/xml'],
-            'description' => 'Sends push notifications',
-            'parameters'  => [
-                [
-                    'name'        => 'api_key',
-                    'type'        => 'string',
-                    'description' => 'DreamFactory application API Key',
-                    'in'          => 'query',
-                    'required'    => false,
-                ],
-                [
-                    'name'        => 'body',
-                    'description' => 'Content - Notification message and target device',
-                    'schema'      => [
-                        'type'       => 'object',
-                        'properties' => [
-                            'message'      => [
-                                'type'        => 'string',
-                                'description' => 'Push notification message'
-                            ],
-                            'data'         => [
-                                'type'        => 'object',
-                                'description' => 'Any custom data to send with notification.'
-                            ],
-                            'device_token' => [
-                                'type'        => 'string',
-                                'description' => 'Target device token. ' .
-                                    'Only required when no API Key is provided or to ignore target devices by API Key.'
-                            ]
-                        ]
+        $resourceName = strtolower($this->name);
+        $path = '/' . $resourceName;
+        $base = [
+            $path => [
+                'post' => [
+                    'summary'     => 'sendPushNotification() - Perform authentication',
+                    'operationId' => 'sendPushNotification',
+                    'description' => 'Sends push notifications',
+                    'parameters'  => [
+                        [
+                            'name'        => 'api_key',
+                            'schema'      => ['type' => 'string'],
+                            'description' => 'DreamFactory application API Key',
+                            'in'          => 'query',
+                        ],
                     ],
-                    'in'          => 'body',
-                    'required'    => true
-                ]
-            ],
-            'responses'   => [
-                '200'     => [
-                    'description' => 'Success',
-                    'schema'      => [
-                        'type'       => 'object',
-                        'properties' => [
-                            'success' => ['type' => 'boolean']
-                        ]
-                    ]
+                    'requestBody' => [
+                        'description' => 'Content - Notification message and target device',
+                        'schema'      => [
+                            'type'       => 'object',
+                            'properties' => [
+                                'message'      => [
+                                    'type'        => 'string',
+                                    'description' => 'Push notification message'
+                                ],
+                                'data'         => [
+                                    'type'        => 'object',
+                                    'description' => 'Any custom data to send with notification.'
+                                ],
+                                'device_token' => [
+                                    'type'        => 'string',
+                                    'description' => 'Target device token. ' .
+                                        'Only required when no API Key is provided or to ignore target devices by API Key.'
+                                ]
+                            ]
+                        ],
+                        'required'    => true
+                    ],
+                    'responses'   => [
+                        '200' => ['$ref' => '#/components/responses/Success']
+                    ],
                 ],
-                'default' => [
-                    'description' => 'Error',
-                    'schema'      => ['$ref' => '#/definitions/Error']
-                ]
             ],
         ];
 
