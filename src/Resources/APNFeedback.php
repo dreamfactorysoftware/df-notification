@@ -29,14 +29,16 @@ class APNFeedback extends BaseResource
     /** {@inheritdoc} */
     protected function getApiDocPaths()
     {
+        $service = $this->getServiceName();
+        $capitalized = camelize($service);
         $resourceName = strtolower($this->name);
         $path = '/' . $resourceName;
         $base = [
             $path => [
                 'get' => [
-                    'summary'     => 'getAPNSFeedback() - Get feedback from APNS server',
-                    'operationId' => 'getAPNSFeedback',
+                    'summary'     => 'Get feedback from APNS server',
                     'description' => 'Retrieves push notification feedback information from APNS server.',
+                    'operationId' => 'get' . $capitalized . 'Feedback',
                     'responses'   => [
                         '200' => [
                             'description' => 'Success',

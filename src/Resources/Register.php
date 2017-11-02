@@ -134,15 +134,17 @@ class Register extends BaseResource
     /** {@inheritdoc} */
     protected function getApiDocPaths()
     {
+        $service = $this->getServiceName();
+        $capitalized = camelize($service);
         $resourceName = strtolower($this->name);
         $path = '/' . $resourceName;
 
         $base = [
             $path => [
                 'get'    => [
-                    'summary'     => 'getRegisteredDevices() - Retrieves registered device tokens',
-                    'operationId' => 'getRegisteredDevices',
+                    'summary'     => 'Retrieves registered device tokens',
                     'description' => 'Retrieves registered device tokens',
+                    'operationId' => 'get' . $capitalized . 'RegisteredDevices',
                     'parameters'  => [
                         [
                             'name'        => 'api_key',
@@ -183,9 +185,9 @@ class Register extends BaseResource
                     ],
                 ],
                 'post'   => [
-                    'summary'     => 'registerDeviceToken() - Register device token',
-                    'operationId' => 'registerDeviceToken',
+                    'summary'     => 'Register device token',
                     'description' => 'Registers device token with an application using API Key.',
+                    'operationId' => 'register' . $capitalized . 'DeviceToken',
                     'parameters'  => [
                         [
                             'name'        => 'api_key',
@@ -196,14 +198,18 @@ class Register extends BaseResource
                     ],
                     'requestBody' => [
                         'description' => 'Device token to register',
-                        'schema'      => [
-                            'type'       => 'object',
-                            'properties' => [
-                                'device_token' => [
-                                    'type'        => 'string',
-                                    'description' => 'Target device token to register. '
-                                ]
-                            ]
+                        'content'     => [
+                            'application/json' => [
+                                'schema' => [
+                                    'type'       => 'object',
+                                    'properties' => [
+                                        'device_token' => [
+                                            'type'        => 'string',
+                                            'description' => 'Target device token to register. '
+                                        ]
+                                    ],
+                                ],
+                            ],
                         ],
                         'required'    => true
                     ],
@@ -224,9 +230,9 @@ class Register extends BaseResource
                     ],
                 ],
                 'put'    => [
-                    'summary'     => 'updateDeviceToken() - Update/Replace device token',
-                    'operationId' => 'updateDeviceToken',
+                    'summary'     => 'Update/Replace device token',
                     'description' => 'Update/Replace existing device token.',
+                    'operationId' => 'update' . $capitalized . 'DeviceToken',
                     'parameters'  => [
                         [
                             'name'        => 'api_key',
@@ -237,18 +243,22 @@ class Register extends BaseResource
                     ],
                     'requestBody' => [
                         'description' => 'Device Token to update/replace.',
-                        'schema'      => [
-                            'type'       => 'object',
-                            'properties' => [
-                                'old_token' => [
-                                    'type'        => 'string',
-                                    'description' => 'Old device token to replace. '
+                        'content'     => [
+                            'application/json' => [
+                                'schema' => [
+                                    'type'       => 'object',
+                                    'properties' => [
+                                        'old_token' => [
+                                            'type'        => 'string',
+                                            'description' => 'Old device token to replace. '
+                                        ],
+                                        'new_token' => [
+                                            'type'        => 'string',
+                                            'description' => 'New device token to replace with. '
+                                        ]
+                                    ],
                                 ],
-                                'new_token' => [
-                                    'type'        => 'string',
-                                    'description' => 'New device token to replace with. '
-                                ]
-                            ]
+                            ],
                         ],
                         'required'    => true
                     ],
@@ -269,9 +279,9 @@ class Register extends BaseResource
                     ],
                 ],
                 'delete' => [
-                    'summary'     => 'deleteDeviceToken() - Delete device token',
-                    'operationId' => 'deleteDeviceToken',
+                    'summary'     => 'Delete device token',
                     'description' => 'Deletes all device tokens registered by an API Key (App).',
+                    'operationId' => 'delete' . $capitalized . 'DeviceToken',
                     'parameters'  => [
                         [
                             'name'        => 'api_key',
