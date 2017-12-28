@@ -25,13 +25,13 @@
     }
   ],
   "support":     {
-    "email":  "support@dreamfactory.com",
+    "email":  "dspsupport@dreamfactory.com",
     "source": "https://github.com/dreamfactorysoftware/df-notification",
     "issues": "https://github.com/dreamfactorysoftware/df-notification/issues",
     "wiki":   "https://wiki.dreamfactory.com"
   },
   "require":     {
-    "dreamfactory/df-core": "~0.13.0",
+    "dreamfactory/df-core": "~0.14.0",
     "sly/notification-pusher": "~2.0"
   },
   "autoload":    {
@@ -41,7 +41,7 @@
   },
   "extra":       {
     "branch-alias": {
-      "dev-develop": "0.6.x-dev"
+      "dev-develop": "0.7.x-dev"
     },
     "laravel": {
       "providers": [
