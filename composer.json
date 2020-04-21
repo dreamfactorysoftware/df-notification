@@ -33,7 +33,7 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require":     {
-    "dreamfactory/df-core": "~0.19.1",
+    "dreamfactory/df-core": "~0.19.2",
     "sly/notification-pusher": "~2.0"
   },
   "autoload":    {
