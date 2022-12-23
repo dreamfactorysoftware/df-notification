@@ -34,11 +34,13 @@
   "prefer-stable": true,
   "require":     {
     "dreamfactory/df-core": "~0.25",
-    "sly/notification-pusher": "~2.0"
+    "apple/apn-push": "^3.1"
   },
   "autoload":    {
     "psr-4": {
-      "DreamFactory\\Core\\Notification\\": "src/"
+      "DreamFactory\\Core\\Notification\\": "src/",
+      "Sly\\NotificationPusher\\": "lib/pusher/src/Sly/NotificationPusher",
+      "sngrl\\PhpFirebaseCloudMessaging\\": "lib/fcm/src"
     }
   },
   "extra":       {
