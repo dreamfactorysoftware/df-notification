@@ -4,6 +4,7 @@ namespace DreamFactory\Core\Notification\Resources;
 
 use Sly\NotificationPusher\Adapter\AdapterInterface;
 use Sly\NotificationPusher\PushManager;
+use Str;
 
 class APNFeedback extends BaseResource
 {
@@ -30,7 +31,7 @@ class APNFeedback extends BaseResource
     protected function getApiDocPaths()
     {
         $service = $this->getServiceName();
-        $capitalized = camelize($service);
+        $capitalized = Str::camel($service);
         $resourceName = strtolower($this->name);
         $path = '/' . $resourceName;
         $base = [

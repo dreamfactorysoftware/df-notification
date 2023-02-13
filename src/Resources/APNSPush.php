@@ -2,6 +2,8 @@
 
 namespace DreamFactory\Core\Notification\Resources;
 
+use Str;
+
 class APNSPush extends BaseResource
 {
     /** Resource name constant */
@@ -26,29 +28,34 @@ class APNSPush extends BaseResource
     /** {@inheritdoc} */
     protected function getMessageOption()
     {
-        $badge = $this->request->getPayloadData('badge', 1);
-        $sound = $this->request->getPayloadData('sound', 'default');
-        $actionLocKey = $this->request->getPayloadData('action-loc-key');
-        $locKey = $this->request->getPayloadData('loc-key');
-        $locArgs = $this->request->getPayloadData('loc-args');
-        $launchImage = $this->request->getPayloadData('launch-image');
-        $custom = $this->request->getPayloadData('custom');
+        $option = [];
+        $payloadKey = [
+            'title' => null,
+            'subtitle' => null,
+            'launch-image' => null,
+            'title-loc-key' => null,
+            'title-loc-args' => null,
+            'subtitle-loc-key' => null,
+            'subtitle-loc-args' => null,
+            'badge' => 1,
+            'sound' => 'default',
+            'volume' => 1,
+            'critical' => null,
+            'category' => null,
+            'content-available' => null,
+            'mutable-content' => null,
+            'url-args' => null,
+            'custom' => null,
+            'loc-key' => null,
+            'loc-args' => null,
+            'expire' => null,
+        ];
 
-        $option = ['badge' => $badge, 'sound' => $sound];
-        if (!empty($actionLocKey)) {
-            $option['actionLocKey'] = $actionLocKey;
-        }
-        if (!empty($locKey)) {
-            $option['locKey'] = $locKey;
-        }
-        if (!empty($locArgs)) {
-            $option['locArgs'] = $locArgs;
-        }
-        if (!empty($launchImage)) {
-            $option['launchImage'] = $launchImage;
-        }
-        if (!empty($custom)) {
-            $option['custom'] = $custom;
+        foreach ($payloadKey as $key => $default) {
+            $payload = $this->getPayloadData($key, $default);
+            if (!empty($payload)) {
+                $option[$key] = $payload;
+            }
         }
 
         return $option;
@@ -58,7 +65,7 @@ class APNSPush extends BaseResource
     protected function getApiDocPaths()
     {
         $service = $this->getServiceName();
-        $capitalized = camelize($service);
+        $capitalized = Str::camel($service);
         $resourceName = strtolower($this->name);
         $path = '/' . $resourceName;
         $base = [

@@ -2,6 +2,8 @@
 
 namespace DreamFactory\Core\Notification\Resources;
 
+use Str;
+
 class GCMPush extends BaseResource
 {
     /** Resource name constant */
@@ -31,7 +33,7 @@ class GCMPush extends BaseResource
     protected function getApiDocPaths()
     {
         $service = $this->getServiceName();
-        $capitalized = camelize($service);
+        $capitalized = Str::camel($service);
         $resourceName = strtolower($this->name);
         $path = '/' . $resourceName;
         $base = [
