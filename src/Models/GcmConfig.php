@@ -58,7 +58,7 @@ class GcmConfig extends BaseServiceConfigModel
         switch ($schema['name']) {
             case 'api_key':
                 $schema['label'] = 'API Key';
-                $schema['description'] = 'Please enter your GCM Server API Key.';
+                $schema['description'] = 'Please enter your FCM Server API Key.';
                 break;
             case 'environment':
                 $schema['type'] = 'picklist';

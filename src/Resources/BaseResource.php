@@ -12,6 +12,7 @@ use DreamFactory\Core\Exceptions\InternalServerErrorException;
 use DreamFactory\Core\Exceptions\NotFoundException;
 use Sly\NotificationPusher\Collection\DeviceCollection;
 use Sly\NotificationPusher\Model\Message;
+use Illuminate\Support\Arr;
 
 /**
  * Class BaseResource
@@ -226,5 +227,22 @@ class BaseResource extends BaseRestResource
     protected function push(Message $message, DeviceCollection $devices)
     {
         return $this->getParent()->push($message, $devices);
+    }
+
+    /**
+     * Returns the total number of notifications that were sent without error.
+     */
+    protected function getSentTokens(): int
+    {
+                
+        /** @var \Sly\NotificationPusher\Model\ResponseInterface */
+        $response = $this->getParent()->getPushManager()->getResponse();
+        $originalResponse = $response->getOriginalResponses();
+
+        $sentTokens = Arr::where($originalResponse, function (bool $value, string $key) {
+            return $value;
+        });
+
+        return count($sentTokens);
     }
 }

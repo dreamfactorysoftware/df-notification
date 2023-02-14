@@ -1,13 +1,14 @@
 <?php
 namespace DreamFactory\Core\Notification\Services;
 
-use DreamFactory\Core\Exceptions\InternalServerErrorException;
-use Sly\NotificationPusher\Adapter\Apns;
 use Sly\NotificationPusher\Model\Device;
 use Sly\NotificationPusher\PushManager;
+use DreamFactory\Core\Notification\Adapters\APNAdapter;
 use DreamFactory\Core\Notification\Resources\APNSPush as PushResource;
 use DreamFactory\Core\Notification\Resources\Register as RegisterResource;
-use DreamFactory\Core\Notification\Resources\APNFeedback as FeedbackResource;
+use DreamFactory\Core\Exceptions\InternalServerErrorException;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class APNService extends BaseService
 {
@@ -25,12 +26,7 @@ class APNService extends BaseService
             'name'       => RegisterResource::RESOURCE_NAME,
             'class_name' => RegisterResource::class,
             'label'      => 'Register'
-        ],
-        FeedbackResource::RESOURCE_NAME => [
-            'name'       => FeedbackResource::RESOURCE_NAME,
-            'class_name' => FeedbackResource::class,
-            'label'      => 'Feedback'
-        ],
+        ]
     ];
 
     /** {@inheritdoc} */
@@ -42,13 +38,16 @@ class APNService extends BaseService
     /** {@inheritdoc} */
     protected function setPusher($config)
     {
-        $environment = array_get($config, 'environment');
+        $apnsConfig = [];
+
+        $environment = Arr::get($config, 'environment');
         if (empty($environment)) {
             throw new InternalServerErrorException(
                 'Missing application environment. Please check service configuration for Environment config.'
             );
         }
-        $certificate = array_get($config, 'certificate');
+
+        $certificate = Arr::get($config, 'certificate');
         if (empty($certificate)) {
             throw new InternalServerErrorException(
                 'Certificate not found. ' .
@@ -56,14 +55,21 @@ class APNService extends BaseService
             );
         }
 
-        $this->createCertificateFile($certificate);
-        $apnsConfig = ['certificate' => $this->certificateFile];
-        $passphrase = array_get($config, 'passphrase');
+        $passphrase = Arr::get($config, 'passphrase');
         if (!empty($passphrase)) {
             $apnsConfig['passPhrase'] = $passphrase;
         }
+
+        $topic = $this->getBundleIdFromCert($certificate);
+        if (empty($topic)) {
+            throw new InternalServerErrorException('Could not extract bundle identifier');
+        }
+
+        $this->createCertificateFile($certificate);
+        $apnsConfig['certificate'] = $this->certificateFile;
+
         $this->pushManager = new PushManager($environment);
-        $this->pushAdapter = new Apns($apnsConfig);
+        $this->pushAdapter = new APNAdapter($topic, $apnsConfig);
     }
 
     /**
@@ -88,5 +94,27 @@ class APNService extends BaseService
         @unlink($this->certificateFile);
 
         return true;
+    }
+
+    /**
+     * Retrieve bundle ID from the certificate content. Return `false` on failure
+     */
+    protected function getBundleIdFromCert(string $cert): string|false
+    {
+        $bundleId = "";
+        $separator = "\r\n";
+        $line = strtok($cert, $separator);
+
+        while ($line !== false) {
+            $line = trim(strtok($separator));
+            if (str_starts_with($line, 'friendlyName') && Str::contains($line, 'com')) 
+            {
+                $pieces = explode(' ', $line);
+                $bundleId .= array_pop($pieces);
+                break;
+            }
+        }
+        
+        return $bundleId ?: false;
     }
 }
