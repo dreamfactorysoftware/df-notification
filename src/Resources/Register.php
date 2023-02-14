@@ -9,6 +9,7 @@ use DreamFactory\Core\Notification\Models\NotificationAppDevice;
 use DreamFactory\Core\Utility\ResourcesWrapper;
 use DreamFactory\Core\Utility\ResponseFactory;
 use DreamFactory\Core\Contracts\ServiceResponseInterface;
+use Str;
 
 class Register extends BaseResource
 {
@@ -135,7 +136,7 @@ class Register extends BaseResource
     protected function getApiDocPaths()
     {
         $service = $this->getServiceName();
-        $capitalized = camelize($service);
+        $capitalized = Str::camel($service);
         $resourceName = strtolower($this->name);
         $path = '/' . $resourceName;
 

@@ -4,6 +4,7 @@ namespace DreamFactory\Core\Notification\Handlers\Events;
 use DreamFactory\Core\Events\ServiceAssignedEvent;
 use DreamFactory\Core\Notification\Services\BaseService as PushServices;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Support\Arr;
 use Log;
 
 class PushEventHandler
@@ -33,13 +34,9 @@ class PushEventHandler
             if($service->isActive()){
                 try {
                     $record = $event->getData();
-                    $request = array_get($event->makeData(), 'request');
-                    $apiKey = array_get(
-                        $request,
-                        'headers.x-dreamfactory-api-key',
-                        array_get($request, 'parameters.api_key')
-                    );
-                    $message = array_get($record, 'data', $event->name);
+                    $request = Arr::get($event->makeData(), 'request');
+                    $apiKey = Arr::get($request, 'headers.x-dreamfactory-api-key', Arr::get($request, 'parameters.api_key'));
+                    $message = Arr::get($record, 'data', $event->name);
                     $service->pushByApiKey($message, $apiKey);
                     Log::debug('Sent push notification on [' . $event->name . '] event.');
                 } catch (\Exception $e){

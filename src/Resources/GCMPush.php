@@ -2,6 +2,8 @@
 
 namespace DreamFactory\Core\Notification\Resources;
 
+use Str;
+
 class GCMPush extends BaseResource
 {
     /** Resource name constant */
@@ -18,7 +20,10 @@ class GCMPush extends BaseResource
         $devices = $this->getDeviceCollection();
         $this->push($message, $devices);
 
-        return ['success' => true];
+        $allTokens = $devices->getIterator()->count();
+        $sentTokens = $this->getSentTokens();
+
+        return ['success' => $allTokens === $sentTokens];
     }
 
     /** {@inheritdoc} */
@@ -31,7 +36,7 @@ class GCMPush extends BaseResource
     protected function getApiDocPaths()
     {
         $service = $this->getServiceName();
-        $capitalized = camelize($service);
+        $capitalized = Str::camel($service);
         $resourceName = strtolower($this->name);
         $path = '/' . $resourceName;
         $base = [

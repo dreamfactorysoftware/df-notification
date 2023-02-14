@@ -12,6 +12,7 @@ use Sly\NotificationPusher\Model\Message;
 use Sly\NotificationPusher\PushManager;
 use Sly\NotificationPusher\Collection\DeviceCollection;
 use Sly\NotificationPusher\Model\Push as Pusher;
+use Illuminate\Support\Arr;
 
 abstract class BaseService extends BaseRestService
 {
@@ -46,7 +47,7 @@ abstract class BaseService extends BaseRestService
             $list = ['', '*'];
             $resources = $this->getResources();
             foreach ($resources as $resource) {
-                $list[] = array_get($resource, 'name') . '/';
+                $list[] = Arr::get($resource, 'name') . '/';
             }
 
             return $list;

@@ -36,8 +36,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             $df->addType(
                 new ServiceType([
                     'name'                  => 'gcm',
-                    'label'                 => 'GCM Push Notification',
-                    'description'           => 'GCM Push Notification Service Provider.',
+                    'label'                 => 'FCM Push Notification',
+                    'description'           => 'FCM Push Notification Service Provider.',
                     'group'                 => ServiceTypeGroups::NOTIFICATION,
                     'subscription_required' => LicenseLevel::SILVER,
                     'config_handler'        => GcmConfig::class,
