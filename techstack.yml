@@ -1,0 +1,296 @@
+repo_name: dreamfactorysoftware/df-notification
+report_id: 192e7f650f0dcf1c08998626fcdb20a5
+repo_type: Public
+timestamp: '2023-12-06T22:37:54+00:00'
+requested_by: daniilly
+provider: github
+branch: master
+detected_tools_count: 23
+tools:
+- name: PHP
+  description: A popular general-purpose scripting language that is especially suited
+    to web development
+  website_url: http://www.php.net/
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/991/hwUcGZ41_400x400.jpg
+  detection_source: Repo Metadata
+- name: Guzzle
+  description: PHP HTTP client that makes it easy to send HTTP requests and trivial
+    to integrate with web services
+  website_url: http://guzzlephp.org/
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Microframeworks (Backend)
+  image_url: https://img.stackshare.io/service/2350/638632.png
+  detection_source: lib/fcm/composer.json
+  last_updated_by: Alexander Kotov
+  last_updated_on: 2022-12-23 10:53:26.000000000 Z
+- name: Symfony
+  description: A PHP full-stack web framework
+  website_url: http://symfony.com/
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Frameworks (Full Stack)
+  image_url: https://img.stackshare.io/service/1197/logosf_positif_03_icon.png
+  detection_source: lib/pusher/composer.json
+  last_updated_by: Alexander Kotov
+  last_updated_on: 2022-12-23 10:53:26.000000000 Z
+- name: Docker
+  description: Enterprise Container Platform for High-Velocity Innovation.
+  website_url: https://www.docker.com/
+  license: Apache-2.0
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Virtual Machine Platforms & Containers
+  image_url: https://img.stackshare.io/service/586/n4u37v9t_400x400.png
+  detection_source: Repo Metadata
+- name: Git
+  description: Fast, scalable, distributed revision control system
+  website_url: http://git-scm.com/
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Version Control System
+  image_url: https://img.stackshare.io/service/1046/git.png
+  detection_source: Repo Metadata
+- name: PHPUnit
+  description: Testing framework for PHP
+  website_url: https://phpunit.de/
+  version: 5.3.4
+  license: BSD-3-Clause
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Testing Frameworks
+  image_url: https://img.stackshare.io/service/1616/1_WsEnddd5Y4EgEHsT054kUQ.jpeg
+  detection_source_url: github.com/dreamfactorysoftware/df-notification/blob/master/lib/fcm/composer.lock
+  detection_source: lib/fcm/composer.json
+  last_updated_by: Alexander Kotov
+  last_updated_on: 2022-12-23 10:53:26.000000000 Z
+- name: PhpSpec
+  description: A  toolset for behavior driven development
+  website_url: http://www.phpspec.net/en/latest/
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Testing Frameworks
+  image_url: https://img.stackshare.io/service/3502/6b9dfb07681dee602dbdf75d9393f07c_400x400.png
+  detection_source: lib/pusher/docker/php-cli/Dockerfile
+  last_updated_by: Alexander Kotov
+  last_updated_on: 2022-12-23 10:53:26.000000000 Z
+- name: Travis CI
+  description: A hosted continuous integration service for open source and private
+    projects
+  website_url: http://travis-ci.com/
+  open_source: false
+  hosted_saas: true
+  category: Build, Test, Deploy
+  sub_category: Continuous Integration
+  image_url: https://img.stackshare.io/service/460/Lu6cGu0z_400x400.png
+  detection_source: lib/pusher/.travis.yml
+  last_updated_by: Alexander Kotov
+  last_updated_on: 2022-12-23 10:53:26.000000000 Z
+- name: atoum/atoum
+  description: Simple modern and intuitive unit testing framework for PHP 5.3+
+  package_url: https://packagist.org/atoum/atoum
+  version: 3.4.2
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/packagist/image.png
+  detection_source_url: github.com/dreamfactorysoftware/df-notification/blob/master/lib/pusher/composer.lock
+  detection_source: lib/pusher/composer.json
+  last_updated_by: Alexander Kotov
+  last_updated_on: 2022-12-23 10:53:26.000000000 Z
+- name: atoum/stubs
+  description: Stubs for atoum
+  package_url: https://packagist.org/atoum/stubs
+  version: 2.6.0
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/packagist/image.png
+  detection_source_url: github.com/dreamfactorysoftware/df-notification/blob/master/lib/pusher/composer.lock
+  detection_source: lib/pusher/composer.json
+  last_updated_by: Alexander Kotov
+  last_updated_on: 2022-12-23 10:53:26.000000000 Z
+- name: doctrine/inflector
+  description: PHP Doctrine Inflector is a small library that can perform string manipulations
+    with regard to upper/lowercase and singular/plural forms of words
+  package_url: https://packagist.org/doctrine/inflector
+  version: 1.1.0
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/packagist/image.png
+  detection_source_url: github.com/dreamfactorysoftware/df-notification/blob/master/lib/pusher/composer.lock
+  detection_source: lib/pusher/composer.json
+  last_updated_by: Alexander Kotov
+  last_updated_on: 2022-12-23 10:53:26.000000000 Z
+- name: guzzlehttp/guzzle
+  description: Guzzle is a PHP HTTP client library
+  package_url: https://packagist.org/guzzlehttp/guzzle
+  version: 6.2.0
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/packagist/image.png
+  detection_source_url: github.com/dreamfactorysoftware/df-notification/blob/master/lib/fcm/composer.lock
+  detection_source: lib/fcm/composer.json
+  last_updated_by: Alexander Kotov
+  last_updated_on: 2022-12-23 10:53:26.000000000 Z
+- name: mockery/mockery
+  description: Mockery is a simple yet flexible PHP mock object framework
+  package_url: https://packagist.org/mockery/mockery
+  version: 0.9.5
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/packagist/image.png
+  detection_source_url: github.com/dreamfactorysoftware/df-notification/blob/master/lib/fcm/composer.lock
+  detection_source: lib/fcm/composer.json
+  last_updated_by: Alexander Kotov
+  last_updated_on: 2022-12-23 10:53:26.000000000 Z
+- name: phpunit/phpunit
+  description: The PHP Unit Testing framework
+  package_url: https://packagist.org/phpunit/phpunit
+  version: 5.3.4
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/packagist/image.png
+  detection_source_url: github.com/dreamfactorysoftware/df-notification/blob/master/lib/fcm/composer.lock
+  detection_source: lib/fcm/composer.json
+  last_updated_by: Alexander Kotov
+  last_updated_on: 2022-12-23 10:53:26.000000000 Z
+- name: symfony/console
+  description: Eases the creation of beautiful and testable command line interfaces
+  package_url: https://packagist.org/symfony/console
+  version: 3.4.0
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/packagist/image.png
+  detection_source_url: github.com/dreamfactorysoftware/df-notification/blob/master/lib/pusher/composer.lock
+  detection_source: lib/pusher/composer.json
+  last_updated_by: Alexander Kotov
+  last_updated_on: 2022-12-23 10:53:26.000000000 Z
+- name: symfony/debug
+  description: Provides tools to ease debugging PHP code
+  package_url: https://packagist.org/symfony/debug
+  version: 3.4.0
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/packagist/image.png
+  detection_source_url: github.com/dreamfactorysoftware/df-notification/blob/master/lib/pusher/composer.lock
+  detection_source: lib/pusher/composer.json
+  last_updated_by: Alexander Kotov
+  last_updated_on: 2022-12-23 10:53:26.000000000 Z
+- name: symfony/filesystem
+  description: Provides basic utilities for the filesystem
+  package_url: https://packagist.org/symfony/filesystem
+  version: 3.4.0
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/packagist/image.png
+  detection_source_url: github.com/dreamfactorysoftware/df-notification/blob/master/lib/pusher/composer.lock
+  detection_source: lib/pusher/composer.json
+  last_updated_by: Alexander Kotov
+  last_updated_on: 2022-12-23 10:53:26.000000000 Z
+- name: symfony/options-resolver
+  description: Provides an improved replacement for the array_replace PHP function
+  package_url: https://packagist.org/symfony/options-resolver
+  version: 3.4.0
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/packagist/image.png
+  detection_source_url: github.com/dreamfactorysoftware/df-notification/blob/master/lib/pusher/composer.lock
+  detection_source: lib/pusher/composer.json
+  last_updated_by: Alexander Kotov
+  last_updated_on: 2022-12-23 10:53:26.000000000 Z
+- name: symfony/process
+  description: Executes commands in sub-processes
+  package_url: https://packagist.org/symfony/process
+  version: 3.4.0
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/packagist/image.png
+  detection_source_url: github.com/dreamfactorysoftware/df-notification/blob/master/lib/pusher/composer.lock
+  detection_source: lib/pusher/composer.json
+  last_updated_by: Alexander Kotov
+  last_updated_on: 2022-12-23 10:53:26.000000000 Z
+- name: symfony/var-dumper
+  description: Provides mechanisms for walking through any arbitrary PHP variable
+  package_url: https://packagist.org/symfony/var-dumper
+  version: 3.4.0
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/packagist/image.png
+  detection_source_url: github.com/dreamfactorysoftware/df-notification/blob/master/lib/pusher/composer.lock
+  detection_source: lib/pusher/composer.json
+  last_updated_by: Alexander Kotov
+  last_updated_on: 2022-12-23 10:53:26.000000000 Z
+- name: zendframework/zend-validator
+  description: Validation classes for a wide range of domains
+  package_url: https://packagist.org/zendframework/zend-validator
+  version: 2.12.2
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/packagist/image.png
+  detection_source_url: github.com/dreamfactorysoftware/df-notification/blob/master/lib/pusher/composer.lock
+  detection_source: lib/pusher/composer.json
+  last_updated_by: Alexander Kotov
+  last_updated_on: 2022-12-23 10:53:26.000000000 Z
+- name: zendframework/zendservice-apple-apns
+  description: OOP Zend Framework wrapper for Apple Push Notification Service
+  package_url: https://packagist.org/zendframework/zendservice-apple-apns
+  version: 1.4.1
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/packagist/image.png
+  detection_source_url: github.com/dreamfactorysoftware/df-notification/blob/master/lib/pusher/composer.lock
+  detection_source: lib/pusher/composer.json
+  last_updated_by: Alexander Kotov
+  last_updated_on: 2022-12-23 10:53:26.000000000 Z
+- name: zendframework/zendservice-google-gcm
+  description: OOP wrapper for Google Cloud Messaging
+  package_url: https://packagist.org/zendframework/zendservice-google-gcm
+  version: 2.1.1
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/packagist/image.png
+  detection_source_url: github.com/dreamfactorysoftware/df-notification/blob/master/lib/pusher/composer.lock
+  detection_source: lib/pusher/composer.json
+  last_updated_by: Alexander Kotov
+  last_updated_on: 2022-12-23 10:53:26.000000000 Z
