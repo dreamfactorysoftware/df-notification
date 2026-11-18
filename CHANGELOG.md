@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [0.9.1] - 2026-11-18
+- Laravel 13 package metadata (PHP 8.3 or later).
+
 ## [0.7.0] - 2017-12-28
 ### Added
 - Added package discovery
